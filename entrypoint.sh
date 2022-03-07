@@ -24,13 +24,17 @@ ${AWS_REGION}
 text
 EOF
 
-sh -c "npm install" \
-&& sh -c "pip install -r requirements.txt" \
-&& sh -c "SLS_DEBUG=1 serverless deploy"
+if [ -f "package.json" ]; then
+  sh -c "npm install"
+fi
+
+if [ -f "requirements.txt" ]; then
+  sh -c "pip install -r requirements.txt"
+fi
+
+sh -c "SLS_DEBUG=1 serverless deploy"
 SUCCESS=$?
 
-
-echo "cleaning up aws deployment environment profile"
 aws configure --profile aws-deploy-action <<-EOF > /dev/null 2>&1
 null
 null
