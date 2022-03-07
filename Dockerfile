@@ -10,20 +10,19 @@ LABEL maintainer="Mircea Preotu <mircea@incognicode.com>"
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ENV APP_HOME /app
-RUN mkdir -p $APP_HOME
-WORKDIR $APP_HOME
-
 RUN apt-get update
-RUN apt-get upgrade -y
 
 RUN /usr/local/bin/python -m pip install --upgrade pip
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
-RUN apt-get install -y gcc g++ make
-RUN apt-get install -y nodejs
 
-RUN apt install -y python3-pip
+RUN apt-get install -y gcc g++ make nodejs python3-pip
+RUN rm -rf /var/lib/apt/lists/*
+
 RUN pip3 install awscli
 RUN npm install -g serverless
+
+ENV PATH /github/workspace/node_modules/.bin:$PATH
+ADD entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
