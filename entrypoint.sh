@@ -29,7 +29,7 @@ if [ -f "package.json" ]; then
 fi
 
 if [ -f "requirements.txt" ]; then
-  sh -c "pip install -r requirements.txt"
+  sh -c "pip install -r requirements.txt --target ."
 fi
 
 sh -c "SLS_DEBUG=1 serverless deploy"
